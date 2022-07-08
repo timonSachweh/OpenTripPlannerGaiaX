@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import org.opentripplanner.gaiax.GaiaxRoutingEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,9 @@ public enum OTPFeature {
   SandboxAPITravelTime(false),
   SandboxAPIParkAndRideApi(false),
   TransferAnalyzer(false),
-  VehicleToStopHeuristics(false);
+  VehicleToStopHeuristics(false),
+
+  GaiaxRoutingApi(true);
 
   private static final Object TEST_SEMAPHORE = new Object();
 

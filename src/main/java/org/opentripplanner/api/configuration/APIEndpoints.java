@@ -5,6 +5,7 @@ import static org.opentripplanner.util.OTPFeature.APIGraphInspectorTile;
 import static org.opentripplanner.util.OTPFeature.APIServerInfo;
 import static org.opentripplanner.util.OTPFeature.APIUpdaterStatus;
 import static org.opentripplanner.util.OTPFeature.ActuatorAPI;
+import static org.opentripplanner.util.OTPFeature.GaiaxRoutingApi;
 import static org.opentripplanner.util.OTPFeature.ReportApi;
 import static org.opentripplanner.util.OTPFeature.SandboxAPIGeocoder;
 import static org.opentripplanner.util.OTPFeature.SandboxAPILegacyGraphQLApi;
@@ -31,6 +32,7 @@ import org.opentripplanner.ext.reportapi.resource.ReportResource;
 import org.opentripplanner.ext.transmodelapi.TransmodelAPI;
 import org.opentripplanner.ext.traveltime.TravelTimeResource;
 import org.opentripplanner.ext.vectortiles.VectorTilesResource;
+import org.opentripplanner.gaiax.GaiaxRoutingEndpoint;
 import org.opentripplanner.index.IndexAPI;
 import org.opentripplanner.util.OTPFeature;
 
@@ -63,6 +65,8 @@ public class APIEndpoints {
     addIfEnabled(SandboxAPIParkAndRideApi, ParkAndRideResource.class);
     addIfEnabled(SandboxAPIGeocoder, GeocoderResource.class);
     addIfEnabled(SandboxAPITravelTime, TravelTimeResource.class);
+
+    addIfEnabled(GaiaxRoutingApi, GaiaxRoutingEndpoint.class);
   }
 
   /**
