@@ -3,12 +3,11 @@ package org.opentripplanner.api.json.gaiax;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import java.time.ZonedDateTime;
 import org.opentripplanner.gaiax.model.response.GaiaXFeatureType;
 import org.opentripplanner.gaiax.model.response.GaiaXRoutingCoordinate;
 
 public class GaiaXModule extends SimpleModule {
-
-  private GaiaXFeatureTypeSerializer typeSerializer;
 
   public GaiaXModule() {
     super(
@@ -17,6 +16,7 @@ public class GaiaXModule extends SimpleModule {
     );
     this.addSerializer(GaiaXFeatureType.class, new GaiaXFeatureTypeSerializer());
     this.addSerializer(GaiaXRoutingCoordinate.class, new GaiaXCoordinateSerializer());
+    this.addSerializer(ZonedDateTime.class, new ZonedDateTimeSerializer());
 
     this.addDeserializer(GaiaXFeatureType.class, new GaiaXFeatureTypeDeserializer());
   }

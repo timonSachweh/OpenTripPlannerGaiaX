@@ -7,6 +7,7 @@ import org.opentripplanner.gaiax.model.GaiaXRoutingStop;
 import org.opentripplanner.gaiax.model.GaiaXStartEndRoutingRequest;
 import org.opentripplanner.gaiax.model.response.GaiaXLineStringGeometry;
 import org.opentripplanner.gaiax.model.response.GaiaXRoutingCoordinate;
+import org.opentripplanner.gaiax.model.response.GaiaXRoutingProperties;
 import org.opentripplanner.gaiax.model.response.GaiaXRoutingResponse;
 import org.opentripplanner.model.GenericLocation;
 import org.opentripplanner.model.plan.Itinerary;
@@ -88,8 +89,9 @@ public class GaiaXRoutingService {
     GaiaXRoutingResponse geoJson,
     Itinerary itinerary
   ) {
-    System.out.println(itinerary.startTime().toString());
-    System.out.println(itinerary.endTime().toString());
+    geoJson
+      .getFeature(0)
+      .setProperties(new GaiaXRoutingProperties(itinerary.startTime(), itinerary.endTime()));
     return geoJson;
   }
 }
