@@ -58,6 +58,7 @@ public class JSONObjectMapperProvider implements ContextResolver<ObjectMapper> {
       new ObjectMapper()
         .registerModule(FeedScopedIdSerializer.makeModule())
         .registerModule(new JtsModule())
+        .registerModule(new GaiaXModule())
         .setSerializationInclusion(Include.NON_NULL); // skip null fields
   }
 
