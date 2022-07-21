@@ -23,7 +23,7 @@ public class GaiaXRoutingResponse {
   }
 
   public GaiaXRoutingFeature getFeature(int index) {
-    if (this.features.size() >= index) this.features.add(new GaiaXRoutingFeature());
+    if (this.features.size() <= index) this.features.add(new GaiaXRoutingFeature());
     return this.features.get(index);
   }
 
