@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
+import org.opentripplanner.api.json.gaiax.GaiaXModule;
 
 /**
  * AgencyAndId is a third-party class in One Bus Away which represents a GTFS element's ID,

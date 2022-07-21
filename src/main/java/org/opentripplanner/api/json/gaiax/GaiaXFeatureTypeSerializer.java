@@ -1,4 +1,4 @@
-package org.opentripplanner.api.json;
+package org.opentripplanner.api.json.gaiax;
 
 import com.fasterxml.jackson.databind.JsonSerializer;
 import java.io.IOException;
