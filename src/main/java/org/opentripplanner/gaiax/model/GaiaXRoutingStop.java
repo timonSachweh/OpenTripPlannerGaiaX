@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class GaiaXRoutingStop implements Cloneable, Serializable {
 
-  private String latitude;
-  private String longitude;
-  private String waitingTime;
+  private Double latitude;
+  private Double longitude;
+  private int waitingTime;
 
   @Override
   public GaiaXRoutingStop clone() {
@@ -21,27 +21,27 @@ public class GaiaXRoutingStop implements Cloneable, Serializable {
     }
   }
 
-  public String getLatitude() {
+  public Double getLatitude() {
     return latitude;
   }
 
-  public void setLatitude(String latitude) {
+  public void setLatitude(Double latitude) {
     this.latitude = latitude;
   }
 
-  public String getLongitude() {
+  public Double getLongitude() {
     return longitude;
   }
 
-  public void setLongitude(String longitude) {
+  public void setLongitude(Double longitude) {
     this.longitude = longitude;
   }
 
-  public String getWaitingTime() {
+  public int getWaitingTime() {
     return waitingTime;
   }
 
-  public void setWaitingTime(String waitingTime) {
+  public void setWaitingTime(int waitingTime) {
     this.waitingTime = waitingTime;
   }
 }

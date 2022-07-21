@@ -11,10 +11,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import org.glassfish.grizzly.http.server.Request;
 import org.opentripplanner.gaiax.model.GaiaXStartEndRoutingRequest;
+import org.opentripplanner.gaiax.model.response.GaiaXRoutingResponse;
+import org.opentripplanner.standalone.server.OTPServer;
 
 @Path("gaiax/routing")
 @PermitAll
 public class GaiaxRoutingEndpoint {
+
+  @Context
+  private OTPServer otpServer;
 
   @DefaultValue("true")
   @QueryParam("routing")
@@ -26,9 +31,12 @@ public class GaiaxRoutingEndpoint {
 
   @POST
   @Produces(MediaType.APPLICATION_JSON)
-  public String routing(GaiaXStartEndRoutingRequest request, @Context UriInfo uriInfo,
-                        @Context Request grizzlyRequest) {
-    System.out.println(request);
-    return "Hello";
+  public GaiaXRoutingResponse routing(
+    GaiaXStartEndRoutingRequest request,
+    @Context UriInfo uriInfo,
+    @Context Request grizzlyRequest
+  ) {
+    GaiaXRoutingService routingService = new GaiaXRoutingService(this.otpServer);
+    return routingService.getRouteForFullRequest(request, routing, eta);
   }
 }
