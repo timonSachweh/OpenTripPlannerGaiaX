@@ -5,4 +5,4 @@
 
 JAR_FILE="$(dirname $0)/target/${project.build.finalName}-shaded.jar"
 
-java -Xmx8G -jar "${JAR_FILE}" "$@"
+java -Xms24G -jar "${JAR_FILE}" "$@"
