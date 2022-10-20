@@ -7,6 +7,7 @@ import javax.ws.rs.core.Application;
 import org.opentripplanner.datastore.DataSource;
 import org.opentripplanner.datastore.OtpDataStore;
 import org.opentripplanner.datastore.configure.DataStoreFactory;
+import org.opentripplanner.gaiax.connector.GaiaxConnectorStore;
 import org.opentripplanner.graph_builder.GraphBuilder;
 import org.opentripplanner.graph_builder.GraphBuilderDataSources;
 import org.opentripplanner.routing.graph.Graph;
@@ -44,6 +45,8 @@ public class OTPAppConstruction {
   private OTPServer server = null;
   private GraphBuilderDataSources graphBuilderDataSources = null;
 
+  private GaiaxConnectorStore gaiaxConnector = null;
+
   /**
    * Create a new OTP configuration instance for a given directory.
    */
@@ -73,6 +76,11 @@ public class OTPAppConstruction {
   public void validateConfigAndDataSources() {
     // Load Graph Builder Data Sources to validate it.
     graphBuilderDataSources();
+  }
+
+  public GaiaxConnectorStore connectorStore() {
+    if (this.gaiaxConnector == null) this.gaiaxConnector = new GaiaxConnectorStore();
+    return this.gaiaxConnector;
   }
 
   /**

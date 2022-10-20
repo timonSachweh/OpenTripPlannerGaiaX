@@ -112,6 +112,8 @@ public class OTPMain {
     // processing input data to fail early
     app.validateConfigAndDataSources();
 
+    app.connectorStore().registerAsDataOffering();
+
     /* Load graph from disk if one is not present from build. */
     if (params.doLoadGraph() || params.doLoadStreetGraph()) {
       DataSource inputGraph = params.doLoadGraph()
