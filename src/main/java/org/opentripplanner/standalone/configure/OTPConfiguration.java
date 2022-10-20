@@ -5,6 +5,7 @@ import org.opentripplanner.datastore.OtpDataStoreConfig;
 import org.opentripplanner.standalone.config.BuildConfig;
 import org.opentripplanner.standalone.config.CommandLineParameters;
 import org.opentripplanner.standalone.config.ConfigLoader;
+import org.opentripplanner.standalone.config.GaiaxConfig;
 import org.opentripplanner.standalone.config.OtpConfig;
 import org.opentripplanner.standalone.config.RouterConfig;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
  *     <li>{@code otp-config.json}</li>
  *     <li>{@code build-config.json}</li>
  *     <li>{@code router-config.json}</li>
+ *     <li>{@code gaiax-config.json}</li>
  * </ol>
  * All files are loaded from the same base directory.
  * <p>
@@ -55,11 +57,18 @@ public class OTPConfiguration {
    */
   private RouterConfig routerConfig;
 
+  /**
+   * The gaiax-config in NOT final because it can be set from the embedded graph.obj build-config
+   * after the graph is loaded.
+   */
+  private GaiaxConfig gaiaxConfig;
+
   private OTPConfiguration(CommandLineParameters cli, ConfigLoader configLoader) {
     this.cli = cli;
     this.otpConfig = configLoader.loadOtpConfig();
     this.buildConfig = configLoader.loadBuildConfig();
     this.routerConfig = configLoader.loadRouterConfig();
+    this.gaiaxConfig = configLoader.loadGaiaxConfig();
   }
 
   /**
@@ -127,6 +136,17 @@ public class OTPConfiguration {
    */
   public RouterConfig routerConfig() {
     return routerConfig;
+  }
+
+  /**
+   * Get the {@code gaiax-config.json} as JsonNode.
+   * <p>
+   * Returns a {@link MissingNode} if base directory is {@code null} or the file does not exist.
+   *
+   * @throws RuntimeException if the file contains syntax errors or cannot be parsed.
+   */
+  public GaiaxConfig gaiaxConfig() {
+    return gaiaxConfig;
   }
 
   /**

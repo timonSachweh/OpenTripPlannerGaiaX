@@ -5,102 +5,119 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import java.io.Serializable;
+import org.opentripplanner.standalone.config.GaiaxConfig;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Artifact implements Serializable {
-	@JsonSetter(nulls = Nulls.SKIP)
-	private String title;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private String description;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private String accessUrl;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private BasicAuth basicAuth;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private String value;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private boolean automatedDownload;
 
-	@JsonSetter(nulls = Nulls.SKIP)
-	@JsonProperty("_links")
-	private Links links;
+  @JsonSetter(nulls = Nulls.SKIP)
+  private String title;
 
-	public Artifact() {
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private String description;
 
-	public Artifact(String title, String description, String accessUrl, BasicAuth auth, String value,
-	                boolean automatedDownload) {
-		this.title = title;
-		this.description = description;
-		this.accessUrl = accessUrl;
-		this.basicAuth = auth;
-		this.value = value;
-		this.automatedDownload = automatedDownload;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private String accessUrl;
 
-	public static Artifact defaultEntity() {
-		String title = "ETA Service";
-		String description = "Access to the eta service backend";
-		String accessUrl = "https://eta.roms.tsachweh.de/otp/gaiax/routing";
-		BasicAuth basicAuth = new BasicAuth("gaiax4roms", "ASDkn358ASskdj!b34");
-		String value = "application/json";
-		boolean automatedDownload = true;
-		return new Artifact(title, description, accessUrl, basicAuth, value, automatedDownload);
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private BasicAuth basicAuth;
 
-	public String getTitle() {
-		return title;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private String value;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private boolean automatedDownload;
 
-	public String getDescription() {
-		return description;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  @JsonProperty("_links")
+  private Links links;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public Artifact() {}
 
-	public String getAccessUrl() {
-		return accessUrl;
-	}
+  public Artifact(
+    String title,
+    String description,
+    String accessUrl,
+    BasicAuth auth,
+    String value,
+    boolean automatedDownload
+  ) {
+    this.title = title;
+    this.description = description;
+    this.accessUrl = accessUrl;
+    this.basicAuth = auth;
+    this.value = value;
+    this.automatedDownload = automatedDownload;
+  }
 
-	public void setAccessUrl(String accessUrl) {
-		this.accessUrl = accessUrl;
-	}
+  public static Artifact defaultEntity(GaiaxConfig config) {
+    boolean automatedDownload = true;
+    return new Artifact(
+      config.getConnectorArtifactTitle(),
+      config.getConnectorArtifactDescription(),
+      config.getServiceBaseUrl() + config.getServicePath(),
+      new BasicAuth(
+        config.getConnectorArtifactAuthUsername(),
+        config.getConnectorArtifactAuthPassword()
+      ),
+      config.getConnectorArtifactValue(),
+      automatedDownload
+    );
+  }
 
-	public BasicAuth getBasicAuth() {
-		return basicAuth;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public void setBasicAuth(BasicAuth basicAuth) {
-		this.basicAuth = basicAuth;
-	}
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-	public String getValue() {
-		return value;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public boolean isAutomatedDownload() {
-		return automatedDownload;
-	}
+  public String getAccessUrl() {
+    return accessUrl;
+  }
 
-	public void setAutomatedDownload(boolean automatedDownload) {
-		this.automatedDownload = automatedDownload;
-	}
+  public void setAccessUrl(String accessUrl) {
+    this.accessUrl = accessUrl;
+  }
 
-	public Links getLinks() {
-		return links;
-	}
+  public BasicAuth getBasicAuth() {
+    return basicAuth;
+  }
 
-	public void setLinks(Links links) {
-		this.links = links;
-	}
+  public void setBasicAuth(BasicAuth basicAuth) {
+    this.basicAuth = basicAuth;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
+
+  public boolean isAutomatedDownload() {
+    return automatedDownload;
+  }
+
+  public void setAutomatedDownload(boolean automatedDownload) {
+    this.automatedDownload = automatedDownload;
+  }
+
+  public Links getLinks() {
+    return links;
+  }
+
+  public void setLinks(Links links) {
+    this.links = links;
+  }
 }

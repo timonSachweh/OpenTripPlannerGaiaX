@@ -7,75 +7,81 @@ import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Links implements Serializable {
-	@JsonSetter(nulls = Nulls.SKIP)
-	private Link self;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private Link contracts;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private Link representations;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private Link catalogs;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private Link subscriptions;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private Link brokers;
 
-	@JsonSetter(nulls = Nulls.SKIP)
-	private Link offers;
+  @JsonSetter(nulls = Nulls.SKIP)
+  private Link self;
 
-	public Link getSelf() {
-		return self;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private Link contracts;
 
-	public void setSelf(Link self) {
-		this.self = self;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private Link representations;
 
-	public Link getContracts() {
-		return contracts;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private Link catalogs;
 
-	public void setContracts(Link contracts) {
-		this.contracts = contracts;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private Link subscriptions;
 
-	public Link getRepresentations() {
-		return representations;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private Link brokers;
 
-	public void setRepresentations(Link representations) {
-		this.representations = representations;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private Link offers;
 
-	public Link getCatalogs() {
-		return catalogs;
-	}
+  public Link getSelf() {
+    return self;
+  }
 
-	public void setCatalogs(Link catalogs) {
-		this.catalogs = catalogs;
-	}
+  public void setSelf(Link self) {
+    this.self = self;
+  }
 
-	public Link getSubscriptions() {
-		return subscriptions;
-	}
+  public Link getContracts() {
+    return contracts;
+  }
 
-	public void setSubscriptions(Link subscriptions) {
-		this.subscriptions = subscriptions;
-	}
+  public void setContracts(Link contracts) {
+    this.contracts = contracts;
+  }
 
-	public Link getBrokers() {
-		return brokers;
-	}
+  public Link getRepresentations() {
+    return representations;
+  }
 
-	public void setBrokers(Link brokers) {
-		this.brokers = brokers;
-	}
+  public void setRepresentations(Link representations) {
+    this.representations = representations;
+  }
 
-	public Link getOffers() {
-		return offers;
-	}
+  public Link getCatalogs() {
+    return catalogs;
+  }
 
-	public void setOffers(Link offers) {
-		this.offers = offers;
-	}
+  public void setCatalogs(Link catalogs) {
+    this.catalogs = catalogs;
+  }
+
+  public Link getSubscriptions() {
+    return subscriptions;
+  }
+
+  public void setSubscriptions(Link subscriptions) {
+    this.subscriptions = subscriptions;
+  }
+
+  public Link getBrokers() {
+    return brokers;
+  }
+
+  public void setBrokers(Link brokers) {
+    this.brokers = brokers;
+  }
+
+  public Link getOffers() {
+    return offers;
+  }
+
+  public void setOffers(Link offers) {
+    this.offers = offers;
+  }
 }

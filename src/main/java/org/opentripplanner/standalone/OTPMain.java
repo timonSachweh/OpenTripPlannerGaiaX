@@ -112,8 +112,6 @@ public class OTPMain {
     // processing input data to fail early
     app.validateConfigAndDataSources();
 
-    app.connectorStore().registerAsDataOffering();
-
     /* Load graph from disk if one is not present from build. */
     if (params.doLoadGraph() || params.doLoadStreetGraph()) {
       DataSource inputGraph = params.doLoadGraph()
@@ -178,6 +176,10 @@ public class OTPMain {
     // However, currently the server runs in a blocking way and waits for shutdown, so has to run last.
     if (params.doServe()) {
       GrizzlyServer grizzlyServer = app.createGrizzlyServer(router);
+
+      // Register as available service at gaiax connector
+      app.connectorStore().registerAsDataOffering();
+
       // Loop to restart server on uncaught fatal exceptions.
       while (true) {
         try {

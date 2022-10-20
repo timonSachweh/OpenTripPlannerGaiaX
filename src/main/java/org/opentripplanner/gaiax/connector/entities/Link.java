@@ -7,23 +7,25 @@ import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Link implements Serializable {
-	private String href;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private boolean templated;
 
-	public String getHref() {
-		return href;
-	}
+  private String href;
 
-	public void setHref(String href) {
-		this.href = href;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private boolean templated;
 
-	public boolean isTemplated() {
-		return templated;
-	}
+  public String getHref() {
+    return href;
+  }
 
-	public void setTemplated(boolean templated) {
-		this.templated = templated;
-	}
+  public void setHref(String href) {
+    this.href = href;
+  }
+
+  public boolean isTemplated() {
+    return templated;
+  }
+
+  public void setTemplated(boolean templated) {
+    this.templated = templated;
+  }
 }

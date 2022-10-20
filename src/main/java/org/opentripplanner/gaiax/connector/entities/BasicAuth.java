@@ -3,30 +3,30 @@ package org.opentripplanner.gaiax.connector.entities;
 import java.io.Serializable;
 
 public class BasicAuth implements Serializable {
-	private String key;
-	private String value;
 
-	public BasicAuth() {
-	}
+  private String key;
+  private String value;
 
-	public BasicAuth(String key, String value) {
-		this.key = key;
-		this.value = value;
-	}
+  public BasicAuth() {}
 
-	public String getKey() {
-		return key;
-	}
+  public BasicAuth(String key, String value) {
+    this.key = key;
+    this.value = value;
+  }
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+  public String getKey() {
+    return key;
+  }
 
-	public String getValue() {
-		return value;
-	}
+  public void setKey(String key) {
+    this.key = key;
+  }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
+  public String getValue() {
+    return value;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
 }

@@ -33,6 +33,7 @@ public class ConfigLoader {
   private static final String OTP_CONFIG_FILENAME = "otp-config.json";
   private static final String BUILD_CONFIG_FILENAME = "build-config.json";
   private static final String ROUTER_CONFIG_FILENAME = "router-config.json";
+  private static final String GAIAX_CONFIG_FILENAME = "gaiax-config.json";
 
   /** When echoing config files to logs, values for these keys will be hidden. */
   private static final Set<String> REDACT_KEYS = Set.of("secretKey", "accessKey", "gsCredentials");
@@ -85,7 +86,8 @@ public class ConfigLoader {
     return (
       OTP_CONFIG_FILENAME.equals(filename) ||
       BUILD_CONFIG_FILENAME.equals(filename) ||
-      ROUTER_CONFIG_FILENAME.equals(filename)
+      ROUTER_CONFIG_FILENAME.equals(filename) ||
+      GAIAX_CONFIG_FILENAME.equals(filename)
     );
   }
 
@@ -101,6 +103,7 @@ public class ConfigLoader {
     logConfigVersion(otpConfigVersion, OTP_CONFIG_FILENAME);
     logConfigVersion(buildConfigVersion, BUILD_CONFIG_FILENAME);
     logConfigVersion(routerConfigVersion, ROUTER_CONFIG_FILENAME);
+    logConfigVersion(routerConfigVersion, GAIAX_CONFIG_FILENAME);
   }
 
   /**
@@ -146,6 +149,21 @@ public class ConfigLoader {
       return RouterConfig.DEFAULT;
     }
     return new RouterConfig(node, ROUTER_CONFIG_FILENAME, true);
+  }
+
+  /**
+   * Load the gaiax configuration file as a JsonNode three. An empty node is returned if the given
+   * {@code configDir}  is {@code null} or config file is NOT found.
+   * <p>
+   *
+   * @see #loadJsonFile for more details.
+   */
+  public GaiaxConfig loadGaiaxConfig() {
+    JsonNode node = loadJsonByFilename(GAIAX_CONFIG_FILENAME);
+    if (node.isMissingNode()) {
+      return GaiaxConfig.DEFAULT;
+    }
+    return new GaiaxConfig(node, GAIAX_CONFIG_FILENAME, true);
   }
 
   /**

@@ -79,7 +79,8 @@ public class OTPAppConstruction {
   }
 
   public GaiaxConnectorStore connectorStore() {
-    if (this.gaiaxConnector == null) this.gaiaxConnector = new GaiaxConnectorStore();
+    if (this.gaiaxConnector == null) this.gaiaxConnector =
+      new GaiaxConnectorStore(this.config.gaiaxConfig());
     return this.gaiaxConnector;
   }
 

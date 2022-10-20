@@ -35,15 +35,19 @@ import org.opentripplanner.gaiax.connector.entities.EtaOffer;
 import org.opentripplanner.gaiax.connector.entities.PagedResource;
 import org.opentripplanner.gaiax.connector.entities.Representation;
 import org.opentripplanner.gaiax.connector.entities.Rule;
+import org.opentripplanner.standalone.config.GaiaxConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GaiaxConnectorStore {
 
-
-  private static final String CONNECTOR_BASE_URL = "https://connector.roms.tsachweh.de:8083";
+  private static final Logger LOG = LoggerFactory.getLogger(GaiaxConnectorStore.class);
+  private final GaiaxConfig config;
   private com.fasterxml.jackson.databind.ObjectMapper mapper;
   private HttpClient client;
 
-  public GaiaxConnectorStore() {
+  public GaiaxConnectorStore(GaiaxConfig config) {
+    this.config = config;
     mapper = new ObjectMapper();
     mapper.findAndRegisterModules();
     mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -80,17 +84,22 @@ public class GaiaxConnectorStore {
       this.addArtifactToRepresentation(representation, artifact);
       this.addRepresentationToOffer(offer, representation);
       this.addContractToOffer(offer, contract);
-      System.out.println("GAIAX: Successfully served data offering through connector: " + CONNECTOR_BASE_URL);
+      LOG.info(
+        "GAIAX: Successfully served data offering through connector: " +
+        config.getConnectorBaseUrl()
+      );
     } catch (URISyntaxException | IOException e) {
       throw new RuntimeException(e);
     }
   }
 
   private Contract addContractToOffer(EtaOffer offer, Contract contract) throws IOException {
-    if (offer == null || offer.getLinks() == null || offer.getLinks().getSelf() == null)
-      return null;
-    if (contract == null || contract.getLinks() == null || contract.getLinks().getSelf() == null)
-      return null;
+    if (
+      offer == null || offer.getLinks() == null || offer.getLinks().getSelf() == null
+    ) return null;
+    if (
+      contract == null || contract.getLinks() == null || contract.getLinks().getSelf() == null
+    ) return null;
     String offerRef = offer.getLinks().getSelf().getHref();
     String contractRef = contract.getLinks().getSelf().getHref();
 
@@ -98,18 +107,24 @@ public class GaiaxConnectorStore {
     request.setEntity(getBody(List.of(contractRef)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() < 300) {
-      System.out.println("GAIAX: contract linked to offer");
-      PagedResource responseContract = this.getResponseBody(response, new TypeReference<PagedResource>() {});
+      LOG.info("GAIAX: contract linked to offer");
+      PagedResource responseContract =
+        this.getResponseBody(response, new TypeReference<PagedResource>() {});
       return responseContract.getElements(new TypeReference<List<Contract>>() {}).get(0);
     }
     return null;
   }
 
-  private Representation addRepresentationToOffer(EtaOffer offer, Representation representation) throws IOException {
-    if (offer == null || offer.getLinks() == null || offer.getLinks().getSelf() == null)
-      return null;
-    if (representation == null || representation.getLinks() == null || representation.getLinks().getSelf() == null)
-      return null;
+  private Representation addRepresentationToOffer(EtaOffer offer, Representation representation)
+    throws IOException {
+    if (
+      offer == null || offer.getLinks() == null || offer.getLinks().getSelf() == null
+    ) return null;
+    if (
+      representation == null ||
+      representation.getLinks() == null ||
+      representation.getLinks().getSelf() == null
+    ) return null;
     String offerRef = offer.getLinks().getSelf().getHref();
     String representationRef = representation.getLinks().getSelf().getHref();
 
@@ -117,18 +132,26 @@ public class GaiaxConnectorStore {
     request.setEntity(getBody(List.of(representationRef)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() < 300) {
-      System.out.println("GAIAX: representation linked to offer");
-      PagedResource responseRepresentation = this.getResponseBody(response, new TypeReference<PagedResource>() {});
-      return responseRepresentation.getElements(new TypeReference<List<Representation>>() {}).get(0);
+      LOG.info("GAIAX: representation linked to offer");
+      PagedResource responseRepresentation =
+        this.getResponseBody(response, new TypeReference<PagedResource>() {});
+      return responseRepresentation
+        .getElements(new TypeReference<List<Representation>>() {})
+        .get(0);
     }
     return null;
   }
 
-  private Artifact addArtifactToRepresentation(Representation representation, Artifact artifact) throws IOException {
-    if (representation == null || representation.getLinks() == null || representation.getLinks().getSelf() == null)
-      return null;
-    if (artifact == null || artifact.getLinks() == null || artifact.getLinks().getSelf() == null)
-      return null;
+  private Artifact addArtifactToRepresentation(Representation representation, Artifact artifact)
+    throws IOException {
+    if (
+      representation == null ||
+      representation.getLinks() == null ||
+      representation.getLinks().getSelf() == null
+    ) return null;
+    if (
+      artifact == null || artifact.getLinks() == null || artifact.getLinks().getSelf() == null
+    ) return null;
     String representationRef = representation.getLinks().getSelf().getHref();
     String artifactRef = artifact.getLinks().getSelf().getHref();
 
@@ -136,40 +159,41 @@ public class GaiaxConnectorStore {
     request.setEntity(getBody(List.of(artifactRef)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() < 300) {
-      System.out.println("GAIAX: Artifact linked to representation");
-      PagedResource responseArtifact = this.getResponseBody(response, new TypeReference<PagedResource>() {});
+      LOG.info("GAIAX: Artifact linked to representation");
+      PagedResource responseArtifact =
+        this.getResponseBody(response, new TypeReference<PagedResource>() {});
       return responseArtifact.getElements(new TypeReference<List<Artifact>>() {}).get(0);
     }
     return null;
   }
 
   private Representation postRepresentation() throws IOException {
-    HttpPost request = new HttpPost(CONNECTOR_BASE_URL + "/api/representations");
-    request.setEntity(getBody(Representation.defaultEntity()));
+    HttpPost request = new HttpPost(config.getConnectorBaseUrl() + "/api/representations");
+    request.setEntity(getBody(Representation.defaultEntity(config)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() < 300) {
-      System.out.println("GAIAX: Artifact created");
+      LOG.info("GAIAX: Artifact created");
       return this.getResponseBody(response, new TypeReference<Representation>() {});
     }
     return null;
   }
 
   private Artifact postArtifact() throws IOException {
-    HttpPost request = new HttpPost(CONNECTOR_BASE_URL + "/api/artifacts");
-    request.setEntity(getBody(Artifact.defaultEntity()));
+    HttpPost request = new HttpPost(config.getConnectorBaseUrl() + "/api/artifacts");
+    request.setEntity(getBody(Artifact.defaultEntity(config)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() < 300) {
-      System.out.println("GAIAX: Representation created");
+      LOG.info("GAIAX: Representation created");
       return this.getResponseBody(response, new TypeReference<Artifact>() {});
     }
     return null;
   }
 
   private Rule addRuleToContract(Contract contract, Rule rule) throws IOException {
-    if (contract == null || contract.getLinks() == null || contract.getLinks().getSelf() == null)
-      return null;
-    if (rule == null || rule.getLinks() == null || rule.getLinks().getSelf() == null)
-      return null;
+    if (
+      contract == null || contract.getLinks() == null || contract.getLinks().getSelf() == null
+    ) return null;
+    if (rule == null || rule.getLinks() == null || rule.getLinks().getSelf() == null) return null;
     String contractRef = contract.getLinks().getSelf().getHref();
     String ruleRef = rule.getLinks().getSelf().getHref();
 
@@ -177,40 +201,43 @@ public class GaiaxConnectorStore {
     request.setEntity(getBody(List.of(ruleRef)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() < 300) {
-      System.out.println("GAIAX: Offer linked to catalog");
-      PagedResource responseRule = this.getResponseBody(response, new TypeReference<PagedResource>() {});
+      LOG.info("GAIAX: Offer linked to catalog");
+      PagedResource responseRule =
+        this.getResponseBody(response, new TypeReference<PagedResource>() {});
       return responseRule.getElements(new TypeReference<List<Rule>>() {}).get(0);
     }
     return null;
   }
 
   private Contract postContract() throws IOException {
-    HttpPost request = new HttpPost(CONNECTOR_BASE_URL + "/api/contracts");
-    request.setEntity(getBody(Contract.defaultEntity()));
+    HttpPost request = new HttpPost(config.getConnectorBaseUrl() + "/api/contracts");
+    request.setEntity(getBody(Contract.defaultEntity(config)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() < 300) {
-      System.out.println("GAIAX: Contract created");
+      LOG.info("GAIAX: Contract created");
       return this.getResponseBody(response, new TypeReference<Contract>() {});
     }
     return null;
   }
 
   private Rule postRule() throws IOException {
-    HttpPost request = new HttpPost(CONNECTOR_BASE_URL + "/api/rules");
-    request.setEntity(getBody(Rule.defaultEntity()));
+    HttpPost request = new HttpPost(config.getConnectorBaseUrl() + "/api/rules");
+    request.setEntity(getBody(Rule.defaultEntity(config)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() == 201) {
-      System.out.println("GAIAX: Rule created");
+      LOG.info("GAIAX: Rule created");
       return getResponseBody(response, new TypeReference<Rule>() {});
     }
     return null;
   }
 
   private EtaOffer addOfferToCatalog(Catalog catalog, EtaOffer offer) throws IOException {
-    if (catalog == null || catalog.getLinks() == null || catalog.getLinks().getSelf() == null)
-      return null;
-    if (offer == null || offer.getLinks() == null || offer.getLinks().getSelf() == null)
-      return null;
+    if (
+      catalog == null || catalog.getLinks() == null || catalog.getLinks().getSelf() == null
+    ) return null;
+    if (
+      offer == null || offer.getLinks() == null || offer.getLinks().getSelf() == null
+    ) return null;
     String catalogRef = catalog.getLinks().getSelf().getHref();
     String offerRef = offer.getLinks().getSelf().getHref();
 
@@ -218,33 +245,31 @@ public class GaiaxConnectorStore {
     request.setEntity(getBody(List.of(offerRef)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() < 300) {
-      System.out.println("GAIAX: Offer linked to catalog");
-      PagedResource responseOffer = this.getResponseBody(response,
-        new TypeReference<PagedResource>() {});
+      LOG.info("GAIAX: Offer linked to catalog");
+      PagedResource responseOffer =
+        this.getResponseBody(response, new TypeReference<PagedResource>() {});
       return responseOffer.getElements(new TypeReference<List<EtaOffer>>() {}).get(0);
     }
     return null;
   }
 
   private EtaOffer postOffer() throws URISyntaxException, IOException {
-    HttpPost request = new HttpPost(CONNECTOR_BASE_URL + "/api/offers");
-    request.setEntity(getBody(EtaOffer.defaultOffer()));
-    request.setHeader("Content-type", "application/json");
+    HttpPost request = new HttpPost(config.getConnectorBaseUrl() + "/api/offers");
+    request.setEntity(getBody(EtaOffer.defaultEntity(config)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() == 201) {
-      System.out.println("GAIAX: Offer created");
+      LOG.info("GAIAX: Offer created");
       return this.getResponseBody(response, new TypeReference<EtaOffer>() {});
     }
     return null;
   }
 
   private Catalog postCatalog() throws IOException {
-    HttpPost request = new HttpPost(CONNECTOR_BASE_URL + "/api/catalogs");
-    request.setEntity(getBody(Catalog.defaultCatalog()));
-    request.setHeader("Content-type", "application/json");
+    HttpPost request = new HttpPost(config.getConnectorBaseUrl() + "/api/catalogs");
+    request.setEntity(getBody(Catalog.defaultEntity(config)));
     HttpResponse response = client.execute(request);
     if (response.getStatusLine().getStatusCode() == 201) {
-      System.out.println("GAIAX: Catalog created");
+      LOG.info("GAIAX: Catalog created");
       return this.getResponseBody(response, new TypeReference<Catalog>() {});
     }
     return null;
@@ -254,7 +279,6 @@ public class GaiaxConnectorStore {
     String json = EntityUtils.toString(response.getEntity());
     return mapper.readValue(json, entity);
   }
-
 
   private HttpEntity getBody(Object obj) throws IOException {
     return new StringEntity(mapper.writeValueAsString(obj));

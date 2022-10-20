@@ -4,47 +4,50 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Page {
-	@JsonSetter(nulls = Nulls.SKIP)
-	private int size;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private int totalElements;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private int totalPages;
-	@JsonSetter(nulls = Nulls.SKIP)
-	private int number;
 
-	public int getSize() {
-		return size;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private int size;
 
-	public void setSize(int size) {
-		this.size = size;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private int totalElements;
 
-	public int getTotalElements() {
-		return totalElements;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private int totalPages;
 
-	public void setTotalElements(int totalElements) {
-		this.totalElements = totalElements;
-	}
+  @JsonSetter(nulls = Nulls.SKIP)
+  private int number;
 
-	public int getTotalPages() {
-		return totalPages;
-	}
+  public int getSize() {
+    return size;
+  }
 
-	public void setTotalPages(int totalPages) {
-		this.totalPages = totalPages;
-	}
+  public void setSize(int size) {
+    this.size = size;
+  }
 
-	public int getNumber() {
-		return number;
-	}
+  public int getTotalElements() {
+    return totalElements;
+  }
 
-	public void setNumber(int number) {
-		this.number = number;
-	}
+  public void setTotalElements(int totalElements) {
+    this.totalElements = totalElements;
+  }
+
+  public int getTotalPages() {
+    return totalPages;
+  }
+
+  public void setTotalPages(int totalPages) {
+    this.totalPages = totalPages;
+  }
+
+  public int getNumber() {
+    return number;
+  }
+
+  public void setNumber(int number) {
+    this.number = number;
+  }
 }
